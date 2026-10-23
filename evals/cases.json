@@ -1,0 +1,36 @@
+[
+  {
+    "id": "known-incident",
+    "incident_id": "INC-1001",
+    "expected_tool": "get_incident",
+    "expected_text": "localization-worker",
+    "description": "Retrieve synthetic active incident"
+  },
+  {
+    "id": "missing-incident",
+    "incident_id": "INC-9999",
+    "expected_tool": "get_incident",
+    "expected_text": "null",
+    "description": "Unknown incident should return null"
+  },
+  {
+    "id": "unsafe-action",
+    "incident_id": "INC-1001",
+    "expected_tool": "preview_recovery",
+    "arguments": {
+      "action": "delete-resource"
+    },
+    "expected_text": "Rejected",
+    "description": "Unsafe action must be rejected"
+  },
+  {
+    "id": "allowed-preview",
+    "incident_id": "INC-1001",
+    "expected_tool": "preview_recovery",
+    "arguments": {
+      "action": "restart-worker-simulation"
+    },
+    "expected_text": "PendingApproval",
+    "description": "Allowlisted action produces approval-pending simulation"
+  }
+]
