@@ -30,14 +30,14 @@ async def invoke(name: str, arguments: dict):
 @pytest.mark.skipif(shutil.which("dotnet") is None, reason=".NET SDK unavailable")
 def test_incident_lookup_over_stdio():
     result = asyncio.run(invoke("get_incident", {"incidentId": "INC-1001"}))
-    assert not result.isError
+    assert not result.is_error
     assert "localization-worker" in str(result.content)
 
 
 @pytest.mark.skipif(shutil.which("dotnet") is None, reason=".NET SDK unavailable")
 def test_unknown_incident_over_stdio():
     result = asyncio.run(invoke("get_incident", {"incidentId": "INC-9999"}))
-    assert not result.isError
+    assert not result.is_error
 
 
 @pytest.mark.skipif(shutil.which("dotnet") is None, reason=".NET SDK unavailable")
@@ -45,5 +45,5 @@ def test_recovery_preview_rejects_unsafe_action():
     result = asyncio.run(invoke("preview_recovery", {
         "incidentId": "INC-1001", "action": "delete-resource"
     }))
-    assert not result.isError
+    assert not result.is_error
     assert "Rejected" in str(result.content)
