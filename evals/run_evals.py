@@ -31,7 +31,22 @@ async def evaluate():
                 try:
                     response = await session.call_tool(case["expected_tool"], args)
                     output = " ".join(getattr(item, "text", "") for item in response.content)
-                    passed = not response.is_error and case["expected_text"].lower() in output.lower()
+                    if case["id"] == "missing-incident":
+                        # A missing MCP result may be represented as empty content or null.
+                        # Verify no incident object was returned instead of matching a string.
+                        passed = (
+                            not response.is_error
+                            and case["incident_id"].lower() not in output.lower()
+                            and not any(
+                                token in output.lower()
+                                for token in ('"id":', '"service":', '"severity":')
+                            )
+                        )
+                    else:
+                        passed = (
+                            not response.is_error
+                            and case["expected_text"].lower() in output.lower()
+                        )
                     results.append({
                         "id": case["id"],
                         "passed": passed,
